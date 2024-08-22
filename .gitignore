@@ -1,0 +1,8 @@
+node_modules
+screenshots
+yarn.lock
+cypress.env.json
+results
+coverage
+.nyc_output
+videos
