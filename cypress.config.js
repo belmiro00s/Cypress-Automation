@@ -8,8 +8,8 @@ module.exports = defineConfig({
     e2e: {
         setupNodeEvents(on, config) {
             // implement node event listeners here
-            require('./cypress/plugins/index')(on, config);
-            require('@cypress/code-coverage/task')(on, config);
+            require('./cypress/plugins/index')(on, config)
+            require('@cypress/code-coverage/task')(on, config)
             return config;
         },
         defaultCommandTimeout: 10000,
@@ -38,5 +38,5 @@ module.exports = defineConfig({
             password: dbPassword,
             port: 5432
         }
-    }
-});
+    },
+})  
