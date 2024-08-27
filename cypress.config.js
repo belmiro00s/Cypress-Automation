@@ -1,5 +1,5 @@
 const { defineConfig } = require("cypress");
-const baseUrl = process.env.BASE_URL || "https://opensource-demo.orangehrmlive.com/"
+const baseUrl = process.env.BASE_URL || "https://parabank.parasoft.com/parabank"
 const apiURL = process.env.API_URL || "http://localhost:3000/api/"
 const dbHost = process.env.DBHOST || "localhost"
 const dbPassword = process.env.DBPASSWORD || "password"
@@ -10,6 +10,8 @@ module.exports = defineConfig({
             // implement node event listeners here
             require('./cypress/plugins/index')(on, config)
             require('@cypress/code-coverage/task')(on, config)
+            config.env.TEST_USER_EMAIL = process.env.USER_ACCOUNT;
+            config.env.TEST_USER_PASSWORD = process.env.USER_PASSWORD
             return config;
         },
         defaultCommandTimeout: 10000,
