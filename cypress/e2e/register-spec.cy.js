@@ -1,8 +1,9 @@
-import loginPage from '../support/pages/login'
+import loginData from '../fixtures/login.json'
+
 
 describe('Login Functionality', () => {
     beforeEach(() => {
-        loginPage.login(Cypress.env('TEST_USER_EMAIL'), Cypress.env('TEST_USER_PASSWORD'));
+        cy.login(loginData.user.userName, loginData.user.password)
     })
 
 

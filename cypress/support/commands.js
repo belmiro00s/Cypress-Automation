@@ -1,1 +1,17 @@
-
+Cypress.Commands.add("login", (userName, password) => {
+        cy.session([userName, password], () => {
+            cy.visit('/', { failOnStatusCode: false })
+            cy.get('#loginPanel')
+                .should('be.visible')
+                .get('input[name="username"]')
+                .should('be.visible')
+                .type(userName)
+                .get('input[name="password"]')
+                .type(password)
+                .should('be.visible')
+                .get('input.button')
+                .contains('Log In')
+                .click()
+            cy.url().should('include', '/overview.htm')
+        })
+})
