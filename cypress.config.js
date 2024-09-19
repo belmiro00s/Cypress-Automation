@@ -1,9 +1,8 @@
 const { defineConfig } = require("cypress");
-const baseUrl = process.env.BASE_URL || "https://parabank.parasoft.com/parabank"
+const baseUrl = process.env.BASE_URL || "https://www.saucedemo.com/"
 const apiURL = process.env.API_URL || "http://localhost:3000/api/"
 const dbHost = process.env.DBHOST || "localhost"
 const dbPassword = process.env.DBPASSWORD || "password"
-const dotenv = require('dotenv');
 
 
 module.exports = defineConfig({
@@ -12,7 +11,6 @@ module.exports = defineConfig({
             // implement node event listeners here
             require('./cypress/plugins/index')(on, config)
             require('@cypress/code-coverage/task')(on, config)
-            dotenv.config()
             return config
         },
         defaultCommandTimeout: 10000,
@@ -30,7 +28,8 @@ module.exports = defineConfig({
             runMode: 2,
             openMode: 0
         },
-        numTestsKeptInMemory: 0
+        //numTestsKeptInMemory: 0
+        testIsolation: false,
     },
     env: {
         apiUrl: apiURL,
