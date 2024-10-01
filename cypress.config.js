@@ -1,8 +1,8 @@
 const { defineConfig } = require("cypress");
-const baseUrl = process.env.BASE_URL || "https://www.saucedemo.com/"
-const apiURL = process.env.API_URL || "http://localhost:3000/api/"
-const dbHost = process.env.DBHOST || "localhost"
-const dbPassword = process.env.DBPASSWORD || "password"
+const baseUrl = process.env.BASE_URL || "https://opensource-demo.orangehrmlive.com/web/index.php/auth/"
+const apiURL = process.env.API_URL || "https://opensource-demo.orangehrmlive.com/web/index.php/auth/"
+// const dbHost = process.env.DBHOST || "localhost"
+// const dbPassword = process.env.DBPASSWORD || "password"
 
 
 module.exports = defineConfig({
@@ -19,26 +19,23 @@ module.exports = defineConfig({
         viewportWidth: 1920,
         baseUrl: baseUrl,
         reporter: 'junit',
-        video: true,
-        reporterOptions: {
-            mochaFile: 'results/my-test-output-[hash].xml',
-            toConsole: false,
-        },
+        video: false,
         retries: {
             runMode: 2,
             openMode: 0
         },
         //numTestsKeptInMemory: 0
         testIsolation: false,
+        experimentalMemoryManagement: true
     },
     env: {
         apiUrl: apiURL,
-        db: {
-            user: "user",
-            host: dbHost,
-            database: "postgres",
-            password: dbPassword,
-            port: 5432
-        }
+        // db: {
+        //     user: "user",
+        //     host: dbHost,
+        //     database: "postgres",
+        //     password: dbPassword,
+        //     port: 5432
+        // }
     },
 })  
