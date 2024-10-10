@@ -13,11 +13,10 @@ Cypress.Commands.add("loginSession", (userName, password) => {
   })
 })
 
-Cypress.Commands.add("login", (userName, password, noWait) => {
-  //cy.intercept("POST", "/auth/validate").as('postLogin')
+Cypress.Commands.add("login", (userName, password) => {
   cy.clearCookies();
   cy.clearLocalStorage();
-  cy.visit('/login', { failOnStatusCode: false })
+  cy.visit('auth/login', { failOnStatusCode: false })
   cy.get('input[name="username"]')
     .should('be.visible')
     .type(userName)
@@ -27,9 +26,6 @@ Cypress.Commands.add("login", (userName, password, noWait) => {
   cy.get('button[type="submit"]')
     .contains('Login')
     .click()
-    // if (!noWait) {
-    //   return cy.wait('@postLogin')
-    // }
 })
 
 
@@ -53,3 +49,10 @@ Cypress.Commands.add('getUserToken', () => {
     return cy.wrap(userToken)
   });
 });
+
+
+Cypress.Commands.add('goToPage', (url , namePage) => {
+  cy.visit(url, { failOnStatusCode: false })
+  cy.get('div.oxd-table-filter-header-title')
+    .should('have.text', namePage)
+})

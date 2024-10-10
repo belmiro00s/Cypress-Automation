@@ -1,6 +1,6 @@
 const { defineConfig } = require("cypress");
-const baseUrl = process.env.BASE_URL || "https://opensource-demo.orangehrmlive.com/web/index.php/auth/"
-const apiURL = process.env.API_URL || "https://opensource-demo.orangehrmlive.com/web/index.php/auth/"
+const baseUrl = process.env.BASE_URL || "https://opensource-demo.orangehrmlive.com/web/index.php/"
+const apiURL = process.env.API_URL || "https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/"
 // const dbHost = process.env.DBHOST || "localhost"
 // const dbPassword = process.env.DBPASSWORD || "password"
 
