@@ -1,14 +1,14 @@
+
 class StaticDropdown {
 
-    selectDropdownsElement(selector, index) {
-        if (index) {
-            cy.get(selector, { timeout: 6000 }).eq(index).click()
-        } else {
-            cy.get(selector, { timeout: 6000 }).click()
-        }
-
+    selectDropdownsElement(selector, index = 0, option) {
+        cy.get(selector).eq(index).should('be.visible').click()
+        cy.get('div[role="option"]', { timeout: 10000 }).each(function ($ele) {
+            if ($ele.text().includes(option)) {
+                cy.wrap($ele).click()
+            }
+        })
     }
-
 }
 
 export default new StaticDropdown()

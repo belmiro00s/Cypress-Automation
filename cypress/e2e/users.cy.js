@@ -14,12 +14,11 @@ describe('Login Functionality', () => {
 
 
     context('User register', () => {
-        it('Should register an new user sucessfully', () => {
+        it('Should register an new user Admin sucessfully', () => {
             cy.goToPage('admin/viewSystemUsers', 'System Users')
             cy.get('button.oxd-button').contains('Add').click()
-            staticDropdowns.selectDropdownsElement('div.oxd-select-text-input', '0')
-           // staticDropdowns.selectDropdownsElement('div.oxd-select-text-input', '1')
+            staticDropdowns.selectDropdownsElement('div.oxd-select-text-input', '0', 'Admin')
+            staticDropdowns.selectDropdownsElement('div.oxd-select-text-input', '1', 'Enabled')
         })
     })
-
 })
