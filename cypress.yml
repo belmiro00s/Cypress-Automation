@@ -26,4 +26,4 @@ jobs:
         run: npm i
 
       - name: Run Cypress tests on ${{ matrix.browser }}
-        run: npx cypress run --browser ${{ matrix.browser }}
+        run: npm run generate:report --browser ${{ matrix.browser }}
