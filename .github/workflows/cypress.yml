@@ -79,7 +79,7 @@ jobs:
 
       # Gera o relatório Allure
       - name: Generate Allure Report
-        run: npx allure generate ./merged-allure-results --clean
+        run: npm run allure:results ./merged-allure-results --clean
 
       # Atualiza o histórico no S3
       - name: Update History
