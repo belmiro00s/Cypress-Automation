@@ -47,6 +47,8 @@ jobs:
         echo "Report uploaded to https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
 
         - name: Send Allure Report Link to Google Chat
+        
+    - name: Send Allure Report Link to Google Chat
       env:
         WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
       run: |
