@@ -45,3 +45,12 @@ jobs:
       run: |
         aws s3 sync allure-report s3://${{ secrets.AWS_S3_BUCKET }}/reports/${{ github.sha }} --delete
         echo "Report uploaded to https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
+
+        - name: Send Allure Report Link to Google Chat
+      env:
+        WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+      run: |
+        REPORT_URL="https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
+        curl -X POST -H "Content-Type: application/json" \
+          -d "{\"text\": \"Relatório Allure disponível: $REPORT_URL\"}" \
+          $WEBHOOK_URL
