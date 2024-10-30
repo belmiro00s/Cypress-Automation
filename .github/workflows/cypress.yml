@@ -9,7 +9,6 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
@@ -29,56 +28,65 @@ jobs:
       - name: Run Cypress tests on ${{ matrix.browser }}
         run: npm run generate:report --browser ${{ matrix.browser }}
 
+      # Upload os resultados de cada browser como um artifact separado
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.browser }}
+          path: allure-results
+          retention-days: 10
 
-
-        generate-report:
-    # Merge reports after playwright tests, even if some shards have failed
+  generate-report:
+    needs: cypress-run
     if: always()
-    needs: [setup-and-run-tests]
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
 
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-    - name: Install dependencies
-      run: npm ci
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
 
-    - name: AWS cli setup
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-north-1
+      - name: Install dependencies
+        run: npm i
 
-    # We want a unique identifier to be used when we create subdirectories on our cloud for reports 
-    - name: Set a timestamp
-      id: timestampid
-      # this will store current time with UTC in outputs.timestamp (eg of value: 20231028_233147Z)
-      run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT" 
+      - name: AWS CLI Setup
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
 
-    - name: Download allure results from GitHub Actions Artifacts
-      uses: actions/download-artifact@v4
-      with:
-        pattern: allure-results* # pattern for multiple files previously stored as artifacts 
-        merge-multiple: true
-        path: merged-allure-results # name of the folder where ALL results will be extracted
+      - name: Set timestamp
+        id: timestamp
+        run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
 
-    # If you put the current history inside allure-results, Allure can generate a report that will merge history files
-    - name: Download current history files from S3
-      run: aws s3 cp s3://allure-history-ad/history/ ./merged-allure-results/history --recursive
+      # Download e mescla os resultados dos diferentes browsers
+      - name: Download Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: allure-results*
+          merge-multiple: true
+          path: merged-allure-results
 
-    - name: Generate Allure report 
-      run: npx allure generate ./merged-allure-results
+      # Baixa o histórico existente do S3
+      - name: Download History
+        continue-on-error: true  # Caso seja a primeira execução
+        run: aws s3 cp s3://allure-history-ad/history/ ./merged-allure-results/history --recursive
 
-    # Copy the history to the same S3 bucket to overwrite the previous history files with updated history
-    - name: Backup the history with the latest data
-      run: aws s3 cp ./allure-report/history s3://allure-history-ad/history/  --recursive
+      # Gera o relatório Allure
+      - name: Generate Allure Report
+        run: npx allure generate ./merged-allure-results --clean
 
-    - name: Deploy html report to S3
-      run: aws s3 cp ./allure-report s3://allure-history-ad/report/${{ steps.timestampid.outputs.timestamp }}/ --recursive
+      # Atualiza o histórico no S3
+      - name: Update History
+        run: aws s3 cp ./allure-report/history s3://allure-history-ad/history/ --recursive
 
-    - name: Write URL in summary
-      run: echo "### Test results - http://allure-history-ad.s3-website.eu-north-1.amazonaws.com/report/${{ steps.timestampid.outputs.timestamp }}/index.html" >> $GITHUB_STEP_SUMMARY
+      # Faz upload do relatório completo
+      - name: Upload Report to S3
+        run: |
+          aws s3 cp ./allure-report s3://allure-history-ad/report/${{ steps.timestamp.outputs.timestamp }}/ --recursive
+          echo "### Test Results - http://allure-history-ad.s3-website.eu-north-1.amazonaws.com/report/${{ steps.timestamp.outputs.timestamp }}/index.html" >> $GITHUB_STEP_SUMMARY
