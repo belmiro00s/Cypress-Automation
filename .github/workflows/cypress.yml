@@ -87,6 +87,4 @@ jobs:
 
       # Faz upload do relatório completo
       - name: Upload Report to S3
-        run: |
-          aws s3 cp ./allure-report s3://allure-history-ad/report/${{ steps.timestamp.outputs.timestamp }}/ --recursive
-          echo "### Test Results - http://allure-history-ad.s3-website.eu-north-1.amazonaws.com/report/${{ steps.timestamp.outputs.timestamp }}/index.html" >> $GITHUB_STEP_SUMMARY
+        run: aws s3 cp ./allure-report s3://allure-history-ad/report/${{ steps.timestampid.outputs.timestamp }}/ --recursive
