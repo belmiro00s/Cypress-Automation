@@ -46,9 +46,11 @@ jobs:
           aws s3 sync allure-report s3://${{ secrets.AWS_S3_BUCKET }}/reports/${{ github.sha }} --delete
           echo "Report uploaded to https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
       
-      - name: Log Allure Report Link
-        run: |
-          echo "Allure Report available at: https://cypresstestresultss.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
+      - name: Upload Allure Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Allure Report
+          path: allure-report
     
 
       #- name: Send Allure Report Link to Google Chat
