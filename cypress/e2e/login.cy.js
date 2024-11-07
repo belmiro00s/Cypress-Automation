@@ -15,9 +15,9 @@ describe('Login Functionality', () => {
     })
 
     it('Should show an error message when entering invalid credentials', () => {
-        const errorMessage = 'Epic sadface: Username and password do not match any user in this service'
+        const errorMessage = 'Invalid credentials'
         cy.login('invalidUser', 'invalidPass', true)
         cy.get('div.oxd-alert-content--error').as('messageError')
-            .get('@messageError').should('have.text', 'Invalid credentials')
+            .get('@messageError').should('have.text', errorMessage)
     })
 })

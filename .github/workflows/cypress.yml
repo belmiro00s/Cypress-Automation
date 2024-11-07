@@ -39,12 +39,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2 # Altere para sua região
+          aws-region: us-east-2 
 
       - name: Upload Report to S3
         run: |
           aws s3 sync allure-report s3://${{ secrets.AWS_S3_BUCKET }}/reports/${{ github.sha }} --delete
           echo "Report uploaded to https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
+      
+      - name: Log Allure Report Link
+        run: |
+          echo "Allure Report available at: https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"    
 
       - name: Send Allure Report Link to Google Chat
         env:
