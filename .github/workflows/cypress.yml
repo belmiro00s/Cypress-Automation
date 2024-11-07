@@ -48,13 +48,15 @@ jobs:
       
       - name: Log Allure Report Link
         run: |
-          echo "Allure Report available at: https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"    
-
-      - name: Send Allure Report Link to Google Chat
-        env:
-          WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-        run: |
           REPORT_URL="https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
-          curl -X POST -H "Content-Type: application/json" \
-            -d "{\"text\": \"Relatório de testes e2e disponível: $REPORT_URL\"}" \
-            $WEBHOOK_URL
+          echo "Allure Report available at: [View Report]($REPORT_URL)"
+    
+
+      #- name: Send Allure Report Link to Google Chat
+        # env:
+         #  WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+        # run: |
+      #     REPORT_URL="https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
+          # curl -X POST -H "Content-Type: application/json" \
+        #     -d "{\"text\": \"Relatório de testes e2e disponível: $REPORT_URL\"}" \
+         #    $WEBHOOK_URL
