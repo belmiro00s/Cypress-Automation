@@ -48,8 +48,7 @@ jobs:
       
       - name: Log Allure Report Link
         run: |
-          REPORT_URL="https://${{ secrets.AWS_S3_BUCKET }}.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
-          echo "Allure Report available at: [View Report]($REPORT_URL)"
+          echo "Allure Report available at: https://cypresstestresultss.s3.amazonaws.com/reports/${{ github.sha }}/index.html"
     
 
       #- name: Send Allure Report Link to Google Chat
