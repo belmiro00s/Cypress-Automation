@@ -1,11 +1,10 @@
 class DynamicDropdown {
     selectOptionDropdownElements(selector, option) {
         cy.intercept('GET', '**/pim/**').as('autocomplete');
-        cy.get(selector, { timeout: timeout })
-          .clear({ force: true })
-          .click()
+        cy.get(selector)
+          .type(option)
           .wait('@autocomplete')
-          .get('li[role="option"]', { timeout: timeout }).then(($ele) => {
+          .get('div[role="option"]').then(($ele) => {
             const elementFound = Array.from($ele).some(($el) => {
               if ($el.textContent.includes(option)) {
                 cy.wrap($el).click();

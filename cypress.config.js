@@ -11,7 +11,7 @@ module.exports = defineConfig({
             // implement node event listeners here
             allureCypress(on, config, {
                 resultsDir: "allure-results",
-              });
+            });
             require('./cypress/plugins/index')(on, config)
             require('@cypress/code-coverage/task')(on, config)
             return config
@@ -21,6 +21,7 @@ module.exports = defineConfig({
         viewportHeight: 1080,
         viewportWidth: 1920,
         baseUrl: baseUrl,
+        apiURL: apiURL,
         reporter: 'junit',
         video: false,
         retries: {
@@ -30,5 +31,9 @@ module.exports = defineConfig({
         //numTestsKeptInMemory: 0
         testIsolation: false,
         experimentalMemoryManagement: true
+    },
+
+    env: {
+        apiUrl: apiURL
     }
 })  

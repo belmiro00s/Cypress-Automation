@@ -44,14 +44,22 @@ Cypress.Commands.add("logoutRequest", () => {
 
 Cypress.Commands.add('getUserToken', () => {
   cy.window().then((win) => {
-    const userToken = win.localStorage.getItem('/core/i18n/messages');
-    cy.log(userToken)
+    const userToken = win.ses('/core/i18n/messages')
     return cy.wrap(userToken)
-  });
-});
+  })
+})
 
 
-Cypress.Commands.add('goToPage', (url , namePage) => {
+Cypress.Commands.add('getUserCookie', () => {
+  cy.getCookie('orangehrm').should('have.property', 'value').then((cookie) => {
+    const userCookie = cookie.value
+    cy.log(userCookie)
+    return cy.wrap(userCookie)
+  })
+})
+
+
+Cypress.Commands.add('goToPage', (url, namePage) => {
   cy.visit(url, { failOnStatusCode: false })
   cy.get('div.oxd-table-filter-header-title')
     .should('have.text', namePage)
