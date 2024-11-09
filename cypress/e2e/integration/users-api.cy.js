@@ -16,17 +16,16 @@ describe('Login Functionality', () => {
 
 
     context('User register', () => {
-        it('Should register 2 new users Admin sucessfully by request api', () => {
+        it('Should register 2 new Admin users successfully via API request', () => {
 
             const numberOfUsers = 2;
-            const users = []
+            let users 
 
-            for (let i = 0; i < numberOfUsers; i++) {
-                users.push({
-                    username: `${faker.internet.userName()}_${faker.datatype.number()}`,
-                    password: faker.internet.password(),
-                });
-            }
+            users = Array.from({length: numberOfUsers}).map(()=> ({
+                username: `${faker.internet.userName()}_${faker.datatype.number()}`,
+                password: faker.internet.password(),
+            }))
+
             users.forEach((user) => {
                 userPage.createNewUserRequest(user).then((response) => {
                     expect(response.status).to.equal(200)
@@ -34,4 +33,8 @@ describe('Login Functionality', () => {
             })
         })
     })
+
+
+
+    
 })
